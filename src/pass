@@ -1,0 +1,88 @@
+use clap::{Arg, Command};
+use rand::Rng;
+use std::iter;
+
+fn generate_password(length: usize, custom_charset: &str) -> String {
+    let password: String = iter::repeat_with(|| {
+        let idx = rand::thread_rng().gen_range(0..custom_charset.len());
+        custom_charset.chars().nth(idx).unwrap()
+    })
+    .take(length)
+    .collect();
+
+    password
+}
+
+fn main() {
+    let matches = Command::new("Password Generator")
+        .version("1.1")
+        .author("Your Name <your.email@example.com>")
+        .about("A customizable random password generator")
+        .arg(
+            Arg::new("length")
+                .short('l')
+                .long("length")
+                .value_name("LENGTH")
+                .help("Specifies the length of the password")
+                .default_value("12")
+                .value_parser(clap::value_parser!(usize)),
+        )
+        .arg(
+            Arg::new("custom")
+                .short('c')
+                .long("custom")
+                .value_name("CHARSET")
+                .help("Specify your custom set of characters to include in the password")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::new("uppercase")
+                .short('u')
+                .long("uppercase")
+                .help("Include uppercase letters (only if no custom charset is specified)")
+                .num_args(0),
+        )
+        .arg(
+            Arg::new("numbers")
+                .short('n')
+                .long("numbers")
+                .help("Include numbers (only if no custom charset is specified)")
+                .num_args(0),
+        )
+        .arg(
+            Arg::new("special")
+                .short('s')
+                .long("special")
+                .help("Include special characters (only if no custom charset is specified)")
+                .num_args(0),
+        )
+        .get_matches();
+
+    let length: usize = *matches.get_one::<usize>("length").unwrap_or(&12);
+
+    let custom_charset = matches.get_one::<String>("custom").map(|s| s.clone());
+
+    let charset = if let Some(custom) = custom_charset {
+        custom
+    } else {
+        let mut charset = "abcdefghijklmnopqrstuvwxyz".to_string();
+
+        if matches.contains_id("uppercase") {
+            charset.push_str("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        }
+
+        if matches.contains_id("numbers") {
+            charset.push_str("0123456789");
+        }
+
+        if matches.contains_id("special") {
+            charset.push_str("!@#$%^&*()-_=+[]{}|;:,.<>?/`~");
+        }
+
+        charset
+    };
+
+    let password = generate_password(length, &charset);
+
+    println!("Generated Password: {}", password);
+}
