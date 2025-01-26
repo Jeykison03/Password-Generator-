@@ -6,32 +6,55 @@
     <title>Password Generator Tool</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f8ff, #e6e6fa);
             color: #333;
         }
         header {
-            background-color: #007bff;
+            background-color: #282c34;
             color: white;
             padding: 20px 10px;
             text-align: center;
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        header h1 {
+            color: #ff6347;
+            font-size: 2.5em;
         }
         section {
-            margin: 20px 0;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+        }
+        h2 {
+            color: #ff6347;
+        }
+        .highlight {
+            background: #ffe4e1;
+            padding: 5px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #d9534f;
+            display: inline-block;
         }
         button {
             display: inline-block;
             margin-top: 10px;
-            padding: 10px 15px;
+            padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
@@ -41,8 +64,25 @@
             margin-top: 20px;
             font-size: 0.9em;
             color: #555;
+            padding: 10px;
+        }
+        .copy-btn {
+            background-color: #d9534f;
+            margin-left: 10px;
+        }
+        .copy-btn:hover {
+            background-color: #b52b27;
         }
     </style>
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard: ' + text);
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -67,6 +107,11 @@
             <li><b>Generate Password:</b> Random number generation selects characters from the specified character set.</li>
             <li><b>Output:</b> The generated password is displayed in the terminal.</li>
         </ul>
+        <p>
+            Example Command:
+            <span class="highlight">cargo run -- --length 16 --uppercase --special</span>
+            <button class="copy-btn" onclick="copyToClipboard('cargo run -- --length 16 --uppercase --special')">Copy</button>
+        </p>
     </section>
 
     <section>
@@ -86,7 +131,7 @@
 
     <section>
         <h2>Quick Links</h2>
-        <button onclick="window.open('https://github.com/your-repository-url', '_blank')">GitHub Repository</button>
+        <button onclick="window.open('https://github.com/Jeykison03/Password-Generator-/edit/main/index.html')">GitHub Repository</button>
         <button onclick="window.open('https://github.com/your-repository-url/raw/main/source-files.zip', '_blank')">Source Files</button>
     </section>
 
@@ -95,3 +140,4 @@
     </footer>
 </body>
 </html>
+
